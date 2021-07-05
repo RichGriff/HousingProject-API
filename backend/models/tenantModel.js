@@ -1,5 +1,4 @@
-import mongoose, { mongo } from "mongoose";
-import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 const tenantSchema = mongoose.Schema(
   {
@@ -12,13 +11,13 @@ const tenantSchema = mongoose.Schema(
       required: true
     },
     contactNumber: {
-      type: Number
+      type: String
     },
     DOB: {
       type: Date,
       required: true
     },
-    accountId: {
+    emailAddress: {
       type: String,
       required: true
     }
