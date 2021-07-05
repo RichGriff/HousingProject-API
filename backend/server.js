@@ -2,6 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
 
+import userRoutes from "./routes/userRoutes.js";
+import tenantRoutes from "./routes/tenantRoutes.js";
+import propertyRoutes from "./routes/propertyRoutes.js";
+import accountRoutes from "./routes/accountRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -13,6 +18,10 @@ app.get("/", (req, res) => {
 });
 
 // ROUTES
+app.use("/api/users", userRoutes);
+app.use("/api/tenant", tenantRoutes);
+app.use("/api/property", propertyRoutes);
+app.use("/api/account", accountRoutes);
 
 const PORT = process.env.PORT || 5000;
 
