@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema(
       required: true
     },
     tenantId: {
-      type: Number,
+      type: String,
       required: true
     },
     isAdmin: {
