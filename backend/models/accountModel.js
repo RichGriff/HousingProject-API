@@ -1,4 +1,3 @@
-import { Decimal128 } from "bson";
 import mongoose from "mongoose";
 
 const accountSchema = mongoose.Schema(
@@ -27,6 +26,14 @@ const accountSchema = mongoose.Schema(
     },
     lastBillingDate: {
       type: Date
+    },
+    propertyId: {
+      type: String,
+      required: true
+    },
+    tenantId: {
+      type: String,
+      required: true
     }
   },
   {

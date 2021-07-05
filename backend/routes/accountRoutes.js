@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
+import { createAccount, getAccount, getAccounts } from "../controllers/accountController.js";
 
-router.get("/", (req, res) => {
-  res.send("This is the accounts");
-});
+router.route("/").get(getAccounts).post(createAccount);
+router.route("/:id").get(getAccount);
 
 export default router;
