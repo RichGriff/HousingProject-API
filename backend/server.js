@@ -2,12 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
 
+import connectDB from "./config/db.js";
+
 import userRoutes from "./routes/userRoutes.js";
 import tenantRoutes from "./routes/tenantRoutes.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 
 dotenv.config();
+
+connectDB();
 
 const app = express();
 
