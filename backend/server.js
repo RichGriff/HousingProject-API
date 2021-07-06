@@ -27,6 +27,10 @@ app.use("/api/tenant", tenantRoutes);
 app.use("/api/property", propertyRoutes);
 app.use("/api/account", accountRoutes);
 
+// Error Middleware
+app.use(notFound);
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold));
