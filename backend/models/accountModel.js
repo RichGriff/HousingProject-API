@@ -29,11 +29,11 @@ const accountSchema = mongoose.Schema(
     },
     propertyId: {
       type: String,
-      required: true
+      required: false
     },
     tenantId: {
       type: String,
-      required: true
+      required: false
     }
   },
   {

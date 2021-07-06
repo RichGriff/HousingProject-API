@@ -3,7 +3,7 @@ import Property from "../models/propertyModel.js";
 
 // @desc    Fetch all properties
 // @route   GET /api/properties
-// @access  Public
+// @access  Private Admin
 const getProperties = asyncHandler(async (req, res) => {
   const properties = await Property.find({});
   res.json(properties);
@@ -12,7 +12,7 @@ const getProperties = asyncHandler(async (req, res) => {
 // @desc    Get single property
 // @route   GET /api/properties/:id
 // @access  Public
-const getProperty = asyncHandler(async (req, res) => {
+const getPropertyById = asyncHandler(async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
     if (property) {
@@ -46,4 +46,27 @@ const createProperty = asyncHandler(async (req, res) => {
   }
 });
 
-export { getProperties, getProperty, createProperty };
+// @desc    Update Property
+// @route   PUT /api/property
+// @access  Private Admin
+const updateProperty = asyncHandler(async (req, res) => {
+  const { address, city, postCode, propertyType } = req.body;
+
+  const property = await Property.findById(req.params.id);
+
+  if (property) {
+    property.address = address;
+    property.city = city;
+    property.postCode = postCode;
+    property.propertyType = propertyType;
+
+    const updatedProperty = await property.save();
+
+    res.json(updatedProperty);
+  } else {
+    res.status(404);
+    throw new Error("Property not found");
+  }
+});
+
+export { getProperties, getPropertyById, createProperty, updateProperty };

@@ -3,7 +3,7 @@ import Tenant from "../models/tenantModel.js";
 
 // @desc    Fetch all tenants
 // @route   GET /api/tenants
-// @access  Public
+// @access  Private Admin
 const getTenants = asyncHandler(async (req, res) => {
   const tenants = await Tenant.find({});
   res.json(tenants);
@@ -11,8 +11,8 @@ const getTenants = asyncHandler(async (req, res) => {
 
 // @desc    Get single tenant
 // @route   GET /api/tenants/:id
-// @access  Private
-const getTenant = asyncHandler(async (req, res) => {
+// @access  Public - Only thier tenant details
+const getTenantById = asyncHandler(async (req, res) => {
   try {
     const tenant = await Tenant.findById(req.params.id);
 
@@ -29,7 +29,7 @@ const getTenant = asyncHandler(async (req, res) => {
 
 // @desc    Create a tenant
 // @route   POST /api/tenants
-// @access  Private
+// @access  Private Admin
 const createTenant = asyncHandler(async (req, res) => {
   try {
     const tenant = new Tenant({
@@ -48,4 +48,27 @@ const createTenant = asyncHandler(async (req, res) => {
   }
 });
 
-export { getTenants, getTenant, createTenant };
+// @desc    Update Tenant
+// @route   PUT /api/tenants
+// @access  Public
+const updateTenant = asyncHandler(async (req, res) => {
+  const { firstname, lastname, contactNumber, dateOfBirth } = req.body;
+
+  const tenant = await Tenant.findById(req.params.id);
+
+  if (tenant) {
+    tenant.firstname = firstname;
+    tenant.lastname = lastname;
+    tenant.contactNumber = contactNumber;
+    tenant.DOB = dateOfBirth;
+
+    const updatedTenant = await tenant.save();
+
+    res.json(updatedTenant);
+  } else {
+    res.status(404);
+    throw new Error("Tenant not found");
+  }
+});
+
+export { getTenants, getTenantById, createTenant, updateTenant };

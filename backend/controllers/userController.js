@@ -59,16 +59,16 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Public
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).select("-password");
   res.json(users);
 });
 
 // @desc    Get single User
 // @route   GET /api/users/:id
 // @access  Public
-const getUser = asyncHandler(async (req, res) => {
+const getUserById = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select("-password");
 
     if (user) {
       res.json(user);
@@ -81,4 +81,4 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUsers, getUser };
+export { authUser, registerUser, getUsers, getUserById };

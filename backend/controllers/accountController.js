@@ -3,7 +3,7 @@ import Account from "../models/accountModel.js";
 
 // @desc    Fetch all accounts
 // @route   GET /api/accounts
-// @access  Public
+// @access  Private Admin
 const getAccounts = asyncHandler(async (req, res) => {
   const accounts = await Account.find({});
   res.json(accounts);
@@ -12,7 +12,7 @@ const getAccounts = asyncHandler(async (req, res) => {
 // @desc    Get single account
 // @route   GET /api/accounts/:id
 // @access  Public
-const getAccount = asyncHandler(async (req, res) => {
+const getAccountById = asyncHandler(async (req, res) => {
   try {
     const account = await Account.findById(req.params.id);
     if (account) {
@@ -28,7 +28,7 @@ const getAccount = asyncHandler(async (req, res) => {
 
 // @desc    Create an account
 // @route   POST /api/accounts
-// @access  Private
+// @access  Private Admin
 const createAccount = asyncHandler(async (req, res) => {
   try {
     const account = new Account({
@@ -49,4 +49,30 @@ const createAccount = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAccounts, getAccount, createAccount };
+// @desc    Update Account
+// @route   PUT /api/accounts
+// @access  Private Admin
+const updateAccount = asyncHandler(async (req, res) => {
+  const { accountType, startDate, endDate, currentStatus, currentBalance, nextBillingDate, lastBillingDate } = req.body;
+
+  const account = await Account.findById(req.params.id);
+
+  if (account) {
+    account.accountType = accountType;
+    account.startDate = startDate;
+    account.endDate = endDate;
+    account.currentStatus = currentStatus;
+    account.currentBalance = currentBalance;
+    account.nextBillingDate = nextBillingDate;
+    account.lastBillingDate = lastBillingDate;
+
+    const updatedAccount = await account.save();
+
+    res.json(updatedAccount);
+  } else {
+    res.status(404);
+    throw new Error("Account not found");
+  }
+});
+
+export { getAccounts, getAccountById, createAccount, updateAccount };
