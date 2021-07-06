@@ -1,5 +1,59 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
+
+// @desc    Auth the user & get token
+// @route   GET /api/users/login
+// @access  Public
+const authUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id)
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});
+
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { email, password, name } = req.body;
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  const user = User.create({
+    name,
+    email,
+    password
+  });
+
+  if (user) {
+    res.status(201).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id)
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
 
 // @desc    Get all Users
 // @route   GET /api/users
@@ -27,25 +81,4 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Create a user
-// @route   POST /api/users
-// @access  Private
-const createUser = asyncHandler(async (req, res) => {
-  try {
-    const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      tenantId: req.body.tenantId,
-      isAdmin: req.body.isAdmin
-    });
-
-    const createdUser = await user.save();
-
-    res.json(createdUser);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-export { getUsers, getUser, createUser };
+export { authUser, registerUser, getUsers, getUser };
