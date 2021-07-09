@@ -38,7 +38,9 @@ const createAccount = asyncHandler(async (req, res) => {
       currentStatus: req.body.currentStatus,
       currentBalance: req.body.currentBalance,
       nextBillingDate: req.body.nextBillingDate,
-      lastBillingDate: req.body.lastBillingDate
+      lastBillingDate: req.body.lastBillingDate,
+      propertyId: req.body.propertyId,
+      tenantId: req.body.tenantId
     });
 
     const createdAccount = await account.save();
@@ -53,7 +55,7 @@ const createAccount = asyncHandler(async (req, res) => {
 // @route   PUT /api/accounts
 // @access  Private Admin
 const updateAccount = asyncHandler(async (req, res) => {
-  const { accountType, startDate, endDate, currentStatus, currentBalance, nextBillingDate, lastBillingDate } = req.body;
+  const { accountType, startDate, endDate, currentStatus, currentBalance, nextBillingDate, lastBillingDate, propertyId, tenantId } = req.body;
 
   const account = await Account.findById(req.params.id);
 
@@ -65,6 +67,8 @@ const updateAccount = asyncHandler(async (req, res) => {
     account.currentBalance = currentBalance;
     account.nextBillingDate = nextBillingDate;
     account.lastBillingDate = lastBillingDate;
+    account.propertyId = propertyId;
+    account.tenantId = tenantId;
 
     const updatedAccount = await account.save();
 
